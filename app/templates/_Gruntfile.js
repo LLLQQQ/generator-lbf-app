@@ -199,7 +199,7 @@ module.exports = function(grunt){
                         'src': __dirname + '/src',
 
                         // deps file
-                        'depsFilePath': '<%= release.no304_generateDeps.options.exportFilePath %>',
+                        'depsFilePath': '<%= release.options.no304_generateDeps.options.exportFilePath %>',
 
                         // 模板框架在本地的根目录
                         'hengineRoot': __dirname + '/src/views',
