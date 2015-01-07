@@ -3,6 +3,7 @@
  * Created by amos on 14-4-9.
  */
 var path = require('path'),
+    devTasks = require('lbf-ide-grunt'),
     spriteLessTemplate = require('./grunt/sprite/lessTemplate');
 
 var HENGINE_HTTP_PORT = 8081,
@@ -70,19 +71,19 @@ module.exports = function(grunt){
         },
 
         sprite: {
-            icons: {
-                src: 'src/less/base/icons/**/*.png',
+            'base-icons': {
+                src: 'src/less/default/base/icons/**/*.png',
                 destImg: 'src/themes/default/base/images/icons.png',
-                destCSS: 'src/less/base/icons.less',
+                destCSS: 'src/less/default/base/icons.less',
                 padding: 10,
                 cssFormat: 'less',
                 engine: 'phantomjs',
 
                 // More information can be found below
-                cssTemplate: spriteLessTemplate,
+                cssTemplate: spriteLessTemplate('base-icons.tmpl'),
 
                 // OPTIONAL: Manual override for imgPath specified in CSS
-                imgPath: '{root}/themes/default/base/images/icons.png',
+                imgPath: 'images/icons.png',
 
                 // OPTIONAL: Map variable of each sprite
                 cssVarMap: function (sprite) {
@@ -91,7 +92,7 @@ module.exports = function(grunt){
                     // EXAMPLE: Prefix all sprite names with 'sprite-'
                     sprite.name = 'icon-' + sprite.name;
                 }
-            }
+            }           
         },
 
         localServer: {
@@ -107,17 +108,27 @@ module.exports = function(grunt){
                         hostname: HENGINE_HOSTNAME,
                         port: HENGINE_HTTP_PORT
                     }],
+
                     ['/template', 'template', {
                         host: '127.0.0.1',
                         hostname: HENGINE_HOSTNAME,
                         port: HENGINE_HTTP_PORT
                     }],
+
                     ['/mockup', 'static', {
                         root: 'dev/mockup'
                     }],
+
+                    // 预先移除js文件当中的版本号，
+                    // 即如果是a-253124basdfasg20141105.js -> a.js
+                    ['/static_proxy', 'removeVersion', {
+                        root: 'src'
+                    }],
+
                     ['/static_proxy', 'static', {
                         root: 'src'
                     }],
+
                     ['/', 'cgi', {
                         env: 'local',
                         root: __dirname + '/dev/cgi/'
@@ -298,10 +309,7 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-spritesmith');
 
-    grunt.loadTasks(__dirname + '/grunt/hengine/tasks');
-    grunt.loadTasks(__dirname + '/grunt/localServer/tasks');
-
-
+    devTasks.loadTasks(grunt);
     grunt.registerTask('dev', 'launch web server and watch tasks', ['concurrent:dev']);
 
 };
