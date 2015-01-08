@@ -3,6 +3,7 @@
  * Created by amos on 14-4-9.
  */
 var path = require('path'),
+    fs = require('fs'),
     spriteLessTemplate = require('./grunt/sprite/lessTemplate');
 
 var HENGINE_HTTP_PORT = 8081,
@@ -23,7 +24,11 @@ module.exports = function(grunt){
             },
 
             scripts: {
-                files: ['src/**/*.js']
+                files: ['src/**/*.js'],
+                tasks: ['_release'],
+                options: {
+                    spawn: false
+                }
             },
 
             css: {
@@ -188,7 +193,87 @@ module.exports = function(grunt){
             }
         },
 
-        release: {
+        copy: {
+
+            // copy src的文件至release处
+            no304_copy_srcToRelease: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: '**',
+                    dest: 'release/',
+                    filter: function (src) {
+                        // 忽略views和less文件
+                        if (src.indexOf('src/views') === 0 || src.indexOf('src/less') === 0 || src.indexOf('src\\views') === 0 || src.indexOf('src\\less') === 0) {
+                            return false;
+                        }
+
+                        // 如果是以.md结尾，是介绍文件，不需要上线
+                        if (path.extname(src) === '.md') {
+                            return false;
+                        }
+
+                        return true;
+                    }
+                }]
+            },
+
+            // copy src的文件并以md5码结尾 至release处
+            no304_copy_releaseDir: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: '**',
+                    dest: 'release/',
+                    filter: function (src) {
+                        // 忽略views和less文件
+                        if (src.indexOf('src/views') === 0 || src.indexOf('src/less') === 0 || src.indexOf('src\\views') === 0 || src.indexOf('src\\less') === 0) {
+                            return false;
+                        }
+
+                        // 如果是以.md结尾，是介绍文件，不需要上线
+                        if (path.extname(src) === '.md') {
+                            return false;
+                        }
+
+                        return true;
+                    },
+                    rename: function (dest, src) {
+
+                        var srcDir = 'src/';
+
+                        // is folder
+                        if (fs.statSync(srcDir + src).isDirectory()) {
+                            return dest + src;
+                        }
+
+                        // 对于js
+                        if (path.extname(src) === '.js') {
+                            // a.js => a.r{$hash}.js
+                            return dest + path.dirname(src) + '/' + path.basename(src).split('.')[0] +
+                                '-' + get16MD5(fs.readFileSync(srcDir + src)) + '.js';
+                        }
+
+                        return dest + src;
+                    }
+                }]
+            }
+        },
+
+        clean: {
+
+            // 清空release里的所有文件和文件夹
+            no304_clean_release: {
+                src: ['release/*']
+            },
+
+            // 删除部分文件
+            no304_clean_deleteReleaseFiles: {
+                src: 'release'
+            }
+        },
+
+        no304_release: {
             options: {
 
                 // 生成deps 至 exportFilePath处
@@ -209,93 +294,23 @@ module.exports = function(grunt){
                         'src': __dirname + '/src',
 
                         // deps file
-                        'depsFilePath': '<%= release.options.no304_generateDeps.options.exportFilePath %>',
+                        'depsFilePath': '<%%= no304_release.options.no304_generateDeps.options.exportFilePath %>',
 
                         // 模板框架在本地的根目录
                         'hengineRoot': __dirname + '/src/views',
 
                         // lbf.config的模块化文件的前缀, staticPrefix为前缀的才认为是本项目资源，
                         // 否则认为是lbf自己的资源
-                        'staticPrefix': ['hrtx2'],
+                        'staticPrefix': ['<%= appname%>'],
 
                         // 生成的locasJson的地址
                         'localsJson': __dirname + '/src/views/locals.json'
                     }
-                },
-
-                // copy src的文件至release处
-                no304_copy_srcToRelease: {
-                    files: [{
-                        expand: true,
-                        cwd: 'src/',
-                        src: '**',
-                        dest: 'release/',
-                        filter: function (src) {
-                            // 忽略views和less文件
-                            if (src.indexOf('src/views') === 0 || src.indexOf('src/less') === 0 || src.indexOf('src\\views') === 0 || src.indexOf('src\\less') === 0) {
-                                return false;
-                            }
-
-                            // 如果是以.md结尾，是介绍文件，不需要上线
-                            if (path.extname(src) === '.md') {
-                                return false;
-                            }
-
-                            return true;
-                        }
-                    }]
-                },
-
-                // copy src的文件并以md5码结尾 至release处
-                no304_copy_releaseDir: {
-                    files: [{
-                        expand: true,
-                        cwd: 'src/',
-                        src: '**',
-                        dest: 'release/',
-                        filter: function (src) {
-                            // 忽略views和less文件
-                            if (src.indexOf('src/views') === 0 || src.indexOf('src/less') === 0 || src.indexOf('src\\views') === 0 || src.indexOf('src\\less') === 0) {
-                                return false;
-                            }
-
-                            // 如果是以.md结尾，是介绍文件，不需要上线
-                            if (path.extname(src) === '.md') {
-                                return false;
-                            }
-
-                            return true;
-                        },
-                        rename: function (dest, src) {
-
-                            var srcDir = 'src/';
-
-                            // is folder
-                            if (fs.statSync(srcDir + src).isDirectory()) {
-                                return dest + src;
-                            }
-
-                            // 对于js
-                            if (path.extname(src) === '.js') {
-                                // a.js => a.r{$hash}.js
-                                return dest + path.dirname(src) + '/' + path.basename(src).split('.')[0] +
-                                    '-' + get16MD5(fs.readFileSync(srcDir + src)) + '.js';
-                            }
-
-                            return dest + src;
-                        }
-                    }]
-                },
-
-                // 清空release里的所有文件和文件夹
-                no304_clean_release: {
-                    src: ['release/*']
-                },
-
-                // 删除部分文件
-                no304_clean_deleteReleaseFiles: {
-                    src: 'release'
                 }
+            },
+
+            release: {
+
             }
         }
     });
@@ -305,10 +320,16 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-spritesmith');
     grunt.loadNpmTasks('lbf-ide-grunt');
 
     grunt.registerTask('dev', 'launch web server and watch tasks', ['concurrent:dev']);
+    grunt.registerTask('release', 'release src to release dir', ['no304_release']);
+
+    // don't call it by yourself, it will be called with watch event
+    grunt.registerTask('_release', 'release src to release dir', ['_no304_release']);
 
 };
