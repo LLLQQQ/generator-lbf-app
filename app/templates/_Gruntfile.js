@@ -4,6 +4,10 @@
  */
 var path = require('path'),
     fs = require('fs'),
+    MD5 = require('MD5'),
+    get16MD5 =  function(content) {
+        return MD5(content).split('').slice(8, 24).join('');
+    },
     spriteLessTemplate = require('./grunt/sprite/lessTemplate');
 
 var HENGINE_HTTP_PORT = 8081,
