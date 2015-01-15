@@ -16,6 +16,9 @@ var HENGINE_HTTP_PORT = 8081,
 
 module.exports = function(grunt){
 
+    // load all grunt module starts with "grunt-"
+    require('load-grunt-tasks')(grunt, {pattern: 'grunt-*'});
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -319,16 +322,6 @@ module.exports = function(grunt){
         }
     });
 
-
-
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-concurrent');
-    grunt.loadNpmTasks('grunt-spritesmith');
-    grunt.loadNpmTasks('lbf-ide-grunt');
 
     grunt.registerTask('dev', 'launch web server and watch tasks', ['concurrent:dev']);
     grunt.registerTask('release', 'release src to release dir', ['no304_release']);
