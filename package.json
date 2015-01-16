@@ -1,6 +1,6 @@
 {
   "name": "generator-lbf-app",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "LBF app generator & industrial workspace",
   "license": "MIT",
   "main": "app/index.js",
@@ -10,6 +10,11 @@
     "email": "chenzhihao@126.com",
     "url": "https://github.com/mice530"
   },
+  "contributors": [{
+    "name": "patrickliu",
+    "email": "patrickliu@tencent.com",
+    "url": "https://github.com/git-patrickliu"
+  }],
   "engines": {
     "node": ">=0.10.0"
   },
