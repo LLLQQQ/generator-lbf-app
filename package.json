@@ -4,7 +4,7 @@
   "description": "LBF app generator & industrial workspace",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "mice530/generator-lbf-app",
+  "repository": "https://github.com/lbfteam/generator-lbf-app",
   "author": {
     "name": "Amos Chen",
     "email": "chenzhihao@126.com",
