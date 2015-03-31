@@ -32,7 +32,7 @@ module.exports = function(grunt){
 
             scripts: {
                 files: ['src/**/*.js'],
-                tasks: ['_release'],
+                // tasks: ['_release'], // 如果想要自动生成dist目录，将这段注释去掉
                 options: {
                     spawn: false
                 }
@@ -208,7 +208,7 @@ module.exports = function(grunt){
                     expand: true,
                     cwd: 'src/',
                     src: '**',
-                    dest: 'release/',
+                    dest: 'dist/',
                     filter: function (src) {
                         // 忽略views和less文件
                         if (src.indexOf('src/views') === 0 || src.indexOf('src/less') === 0 || src.indexOf('src\\views') === 0 || src.indexOf('src\\less') === 0) {
@@ -231,7 +231,7 @@ module.exports = function(grunt){
                     expand: true,
                     cwd: 'src/',
                     src: '**',
-                    dest: 'release/',
+                    dest: 'dist/',
                     filter: function (src) {
                         // 忽略views和less文件
                         if (src.indexOf('src/views') === 0 || src.indexOf('src/less') === 0 || src.indexOf('src\\views') === 0 || src.indexOf('src\\less') === 0) {
@@ -269,14 +269,14 @@ module.exports = function(grunt){
 
         clean: {
 
-            // 清空release里的所有文件和文件夹
+            // 清空dist里的所有文件和文件夹
             no304_clean_release: {
-                src: ['release/*']
+                src: ['dist/*']
             },
 
             // 删除部分文件
             no304_clean_deleteReleaseFiles: {
-                src: 'release'
+                src: 'dist'
             }
         },
 
