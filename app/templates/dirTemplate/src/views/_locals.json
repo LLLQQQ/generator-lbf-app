@@ -1,17 +1,17 @@
 {
   "local": {
     "isLocal": true,
-    "domain": "local.qiye.qq.com",
-    "sslDomain": "local.qiye.qq.com",
+    "domain": "<%= dm%>",
+    "sslDomain": "<%= dm%>",
     "base": "/static_proxy",
 
     "lbfSrc": "//devcombo.b.qq.com/lbf/0.8.2/LBF.js",
     "lbfConf": {
       "paths": {
-        "crm3": "//{domain}/static_proxy"
+        "<%= appname %>": "//{domain}/static_proxy"
       },
       "vars": {
-        "theme": "//local.qiye.qq.com/static_proxy/themes/default"
+        "theme": "//<%= dm%>/static_proxy/themes/default"
       },
       "env": "local",
       "combo": false,
@@ -25,7 +25,7 @@
     "lbfSrc": "//devcombo.b.qq.com/lbf/0.8.2/LBF.js",
     "lbfConf": {
       "vars": {
-        "theme": "//devcombo.b.qq.com/crm3/src/themes/default"
+        "theme": "//devcombo.b.qq.com/<%= appname %>/src/themes/default"
       },
       "env": "development",
       "combo": false,
@@ -40,7 +40,7 @@
     "lbfConf": {
       "comboSuffix": "?v=20150312",
       "vars": {
-        "theme": "//oacombo.b.qq.com/crm3/src/themes/default"
+        "theme": "//oacombo.b.qq.com/<%= appname %>/src/themes/default"
       },
       "env": "test"
     }
@@ -52,24 +52,19 @@
   "common": {
     "domain": "combo.b.qq.com",
     "sslDomain": "sslcombo.b.qq.com",
-    "base": "/crm3/src",
+    "base": "/<%= appname %>/src",
 
     "lbfSrc": "//combo.b.qq.com/lbf/0.8.2/LBF.js",
     "lbfConf": {
       "comboSuffix": "?v=20150312",
       "paths": {
-        "crm3": "//{domain}/crm3/src"
+        "<%= appname %>": "//{domain}/<%= appname %>/src"
       },
       "vars": {
-        "theme": "//combo.b.qq.com/crm3/src/themes/default"
+        "theme": "//combo.b.qq.com/<%= appname %>/src/themes/default"
       },
       "env": "production",
       "combo": true
-    },
-
-    "ptlogin": {
-      "proxy": "/static_proxy/crm3/src/comp/login/proxy.html",
-      "appID": "717016513"
     }
   }
 }
