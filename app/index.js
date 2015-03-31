@@ -59,9 +59,9 @@ var LbfAppGenerator = yeoman.generators.Base.extend({
         this.template('_package.json', 'package.json');
         this.template('_bower.json', 'bower.json');
         this.template('_Gruntfile.js', 'Gruntfile.js');
-        this.template('dirTemplate/src/views/_locals.json', 'dirTemplate/src/views/locals.json');
 
         this.directory('dirTemplate', './');
+        this.template('_locals.json', 'src/views/locals.json');
     },
 
     projectfiles: function () {
