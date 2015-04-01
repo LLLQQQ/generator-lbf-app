@@ -15,6 +15,15 @@ Install [Yeoman](http://yeoman.io) with [npm](http://npmjs.org):
 ```bash
 $ npm install -g yo generator-lbf-app
 ```
+in Windows,
+first
+```bash
+$ npm install -g yo
+```
+then
+```bash
+$ npm install -g generator-lbf-app
+```
 
 Make a new directory, and enter into it:
 ```bash
