@@ -130,15 +130,17 @@ module.exports = function(grunt){
                         root: 'dev/mockup'
                     }],
 
+
+                    ['/static_proxy', 'static', {
+                        root: 'src'
+                    }],
+
                     // 预先移除js文件当中的版本号，
                     // 即如果是a-253124basdfasg20141105.js -> a.js
                     ['/static_proxy', 'removeVersion', {
                         root: 'src'
                     }],
 
-                    ['/static_proxy', 'static', {
-                        root: 'src'
-                    }],
 
                     ['/', 'cgi', {
                         env: 'local',
