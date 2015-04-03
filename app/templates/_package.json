@@ -14,7 +14,7 @@
         "grunt-contrib-watch": "~0.6.1",        
         "tmod": "0.0.1",
         "underscore": "^1.6.0",
-        "lbf-hengine": "^1.0.5",
+        "lbf-hengine-new": "^0.x",
         "grunt-spritesmith": "^2.1.3",
         "grunt-contrib-copy": "~0.7.0",
         "grunt-contrib-clean": "~0.6.0",
